@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>React Elements</title>
+    </head>
+    <body>
+        <div id="root">            
+        </div>
+        <!-- https://unpkg.com/react@16.8.6/umd/react.development.js -->
+        <script src="./js/react.development.js"></script>
+        <!-- https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js -->
+        <script src="./js/react-dom.development.js"></script>
+        <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+        <script src="./js/babel.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root');
+
+            // const ele = React.createElement('h1', {}, 'Hello World!!!');
+            // // const ele = React.createElement('a', {href: 'http://www.google.com', target: '_blank'}, 'Visit Google');
+
+            // const ele = React.createElement('ul',{}, 
+            //     React.createElement('li', {},
+            //         React.createElement('a', {href:'http://www.google.com', target: '_blank'},'Visit Google')
+            //     ),
+            //     React.createElement('li', {}, 
+            //         React.createElement('a', {href:'http://www.facebook.com', target: '_blank'}, 'Visit Facebook')
+            //     )
+            // )
+
+            const ele = React.createElement('div', {}, 
+                React.createElement('h1', {}, 'listing users'),
+                React.createElement('ul', {}, 
+                    React.createElement('li', {}, 'Sam'),
+                    React.createElement('li', {}, 'John'),
+                    React.createElement('li', {}, 'Doe')
+                )
+            )
+            ReactDOM.render(ele, rootHandle);
+        </script>
+    </body>
+</html>

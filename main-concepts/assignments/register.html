@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registration Form</title>
+    </head>
+    <body>
+        <div id="root">
+        </div>
+
+        <script src="./js/react.development.js"></script>
+
+        <script src="./js/react-dom.development.js"></script>
+
+        <script src="./js/babel.js"></script>
+
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root')
+
+            class Registeration extends React.Component {
+                constructor(){
+                    super()
+                    this.state = {
+                        name: '',
+                        email: '',
+                        isMale: false,
+                        isFemale: false
+                    }
+                }
+
+                handleNameChange = (e) => {
+                    const name = e.target.value
+                    this.setState({name})
+                }
+
+                handleNameBlur = (e) => {
+                    console.log('inside blur event')
+                    axios.get(`https://gender-api.com/get?name=${this.state.name}&key=pRPLCejozFwCHFbVCR`)
+                        .then(response => {
+                            this.setState({
+                                isMale: response.data.gender === 'male' ? true : false,
+                                isFemale: response.data.gender === 'female' ? true: false
+                            })
+                            console.log("this.state: "+this.state)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                }
+
+                handleMailChange = (e) => {
+                    const email = e.target.value
+                    this.setState({email})
+                }
+
+                handleMaleRadioChange = (e) => {
+                    console.log('Male Radio Button checked status changed')
+                }
+
+                handleFemaleRadioChange = (e) => {
+                    console.log('Female Radio Button checked status changed')
+                }
+
+                render() {
+                    console.log('render', this.state)
+                    return(
+                        <div>
+                            <form>
+                                <label>
+                                    Name 
+                                    <input type='text' value={this.state.name} onChange={this.handleNameChange} onBlur={this.handleNameBlur}/>
+                                </label> <br/>
+                                <label>
+                                    Email
+                                    <input type='text' value={this.state.email} onChange={this.handleMailChange}/>
+                                </label> <br/>
+                                <label>Gender
+                                    <input type='radio' value='male'  checked={this.state.isMale} onChange={this.handleMaleRadioChange}/>Male
+                                    <input type='radio' value='female' checked={this.state.isFemale} onChange={this.handleFemaleRadioChange}/>Female 
+                                </label>
+                            </form>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<Registeration />, rootHandle)
+
+        </script>
+    </body>
+</html>

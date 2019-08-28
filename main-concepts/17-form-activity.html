@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div id="root">            
+        </div>
+        
+        
+        <!-- https://unpkg.com/react@16.8.6/umd/react.development.js -->
+        <script src="./js/react.development.js"></script>
+
+        <!-- https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js -->
+        <script src="./js/react-dom.development.js"></script>
+
+
+        <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+        <script src="./js/babel.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root');
+            //All forms are class component
+            //property created within a class is available to all methods defined within the class
+            //SST (Single Source of Truth - React)   Single Responsibility(Object Oriented Programming)
+ 
+            class Employee extends React.Component {
+                constructor() {
+                    console.log('constructor');
+                    super()
+                    this.state = {
+                        text: 'Rajesh'
+                    }
+                }
+
+                handleChange = (e) => {
+                    const text = e.target.value;
+                    this.setState({text})
+                }
+
+                
+                render() {
+                    console.log('render')
+                    return (
+                        <div>
+                            <h2>Word & Char Count</h2>
+                            <form>
+                                <label>
+                                    Text
+                                    <textarea value={this.state.text} cols={100} rows={40} onChange={this.handleChange}></textarea>
+                                </label> <br/>
+                                <p> total characters: {this.state.text.length} </p>
+                                <p> total words: {this.state.text.split(' ').length} </p>
+                            </form>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<Employee />, rootHandle);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div id="root">            
+        </div>
+        
+        
+        <!-- https://unpkg.com/react@16.8.6/umd/react.development.js -->
+        <script src="./js/react.development.js"></script>
+
+        <!-- https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js -->
+        <script src="./js/react-dom.development.js"></script>
+
+
+        <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+        <script src="./js/babel.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root');
+
+            class Customer extends React.Component {
+                constructor() {
+                    console.log('constructor')
+                    super()
+                    this.state = {
+                        customers: [
+                            { id: 1, name: 'sam'},
+                            { id: 2, name: 'john'},
+                            { id: 3, name: 'rachel'},
+                            { id: 4, name: 'monica'}
+                        ]
+                    }
+                }
+
+            handleRemove(id) {
+                console.log('handle remove')
+                this.setState((prevState) => {
+                    return {
+                        customers: prevState.customers.filter(customer => customer.id !== id)
+                    }
+                })
+
+                this.setState(prevState => ({
+                    customers: prevState.customers.filter(customer => customer.id !== id)
+                }))
+            }
+
+            // listCustomers() {
+            //     const customers = [];
+            //     this.state.customers.forEach(customer => {
+            //         customers.push(<li key={customer.id}>{customer.name}</li>)
+            //     })
+            //     return customers
+            // }
+
+            render() {
+                console.log('render')
+                return (
+                    <div>
+                        <h2> Listing Customers - {this.state.customers.length} </h2>
+                        <ul>
+                            {/*this.listCustomers()*/}
+                            {this.state.customers.map(customer => {
+                                return <li key={customer.id}> { customer.name } <button onClick={() => {
+                                      console.log('event handler')
+                                      const confirmRemove = window.confirm("Are you sure?")
+                                      if(confirmRemove) {
+                                        this.handleRemove(customer.id)
+                                      }
+
+                                }}>remove</button></li>
+                            })}
+                        </ul>
+                    </div>
+                )
+            }
+            }
+
+            ReactDOM.render(<Customer />, rootHandle)
+        </script>
+    </body>
+</html>

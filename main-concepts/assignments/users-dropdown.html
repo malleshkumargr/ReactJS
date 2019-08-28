@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Select users from drop-down list</title>
+    </head>
+    <body>
+        <div id="root">
+        </div>
+
+        <script src="./js/react.development.js"></script>
+
+        <script src="./js/react-dom.development.js"></script>
+
+        <script src="./js/babel.js"></script>
+
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root')
+
+            class Registeration extends React.Component {
+                constructor(){
+                    super()
+                    this.state = {
+                        users: []
+                    }
+                }
+
+                handleUserNameChange = (e) => {
+                    const name = e.target.value
+                    this.setState({name})
+                }
+
+                componentDidMount() {
+                    axios.get('https://jsonplaceholder.typicode.com/users')
+                        .then(response => {
+                            const users = response.data
+                            this.setState({users})
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                }
+
+                render() {
+                    return(
+                        <div>
+                            <label>
+                                Select Users
+                                <select onChange={this.handleUserNameChange}>
+                                    <option value=''> select </option>
+                                    {this.state.users.map(user => {
+                                        return <option key={user.id} value={user.id}>{user.name}</option>
+                                    })}
+                                </select>
+                            </label>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<Registeration />, rootHandle)
+
+        </script>
+    </body>
+</html>

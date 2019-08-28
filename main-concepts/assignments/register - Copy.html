@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registration Form</title>
+    </head>
+    <body>
+        <div id="root">
+        </div>
+
+        <script src="./js/react.development.js"></script>
+
+        <script src="./js/react-dom.development.js"></script>
+
+        <script src="./js/babel.js"></script>
+
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root')
+
+            class Registeration extends React.Component {
+                constructor(){
+                    super()
+                    this.state = {
+                        name: '',
+                        gender: '',
+                        email: ''
+                    }
+                }
+
+                handleNameChange = (e) => {
+                    const name = e.target.value
+                    this.setState({name})
+                }
+
+                handleNameBlur = (e) => {
+                    
+                    axios.get(`https://gender-api.com/get?name=${this.state.name}&key=pRPLCejozFwCHFbVCR`)
+                        .then(response => {
+                            this.setState({
+                                gender: response.data.gender
+                            })
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                }
+
+                handleMailChange = (e) => {
+                    const email = e.target.value
+                    this.setState({email})
+                }
+
+                render() {
+                    return(
+                        <div>
+                            <form>
+                                <label>
+                                    Name 
+                                    <input type='text' value={this.state.name} onChange={this.handleNameChange} onBlur={this.handleNameBlur}/>
+                                </label> <br/>
+                                <label>
+                                    Email
+                                    <input type='text' value={this.state.email} onChange={this.handleMailChange}/>
+                                </label> <br/>
+                                <label>
+                                    
+                                    {this.state.gender ? (
+                                       
+
+                                        this.state.gender === 'male' ? (
+                                            <div>
+                                            Gender
+                                            <input type='radio' checked={true}/>Male
+                                            <input type='radio'/>Female
+                                        </div>
+                                        ) : (
+                                            <div>
+                                            Gender
+                                            <input type='radio'/>Male
+                                            <input type='radio' checked={true}/>Female
+                                        </div>
+                                        )
+                                    ) : (
+                                        <div>
+                                            Gender
+                                            <input type='radio'/>Male
+                                            <input type='radio'/>Female
+                                        </div>
+                                    ) }
+                                    
+                                </label>
+                            </form>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<Registeration />, rootHandle)
+
+        </script>
+    </body>
+</html>

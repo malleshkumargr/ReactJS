@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div id="root">            
+        </div>
+        
+        
+        <!-- https://unpkg.com/react@16.8.6/umd/react.development.js -->
+        <script src="./js/react.development.js"></script>
+
+        <!-- https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js -->
+        <script src="./js/react-dom.development.js"></script>
+
+
+        <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+        <script src="./js/babel.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root');
+            class Counter extends React.Component {
+                constructor() {
+                    super()
+                    this.state = {
+                        count: 0
+                    }
+                }
+
+                handleClick = () => {
+                    this.setState(prevState => ({
+                        count: prevState.count + 1
+                    }), () => {
+                        console.log('callback function', this.state)
+                    })
+
+                    console.log('handle click', this.state)
+                }
+
+                render() {
+                    return (
+                        <div>
+                            <h1> {this.state.count} </h1>
+                            <Btn text="up" handleClick={this.handleClick} />
+
+                            <button onClick={this.handleClick}> counter componet </button>
+                        </div>
+                    )
+                }
+            }
+
+            function Btn(props) {
+                return <button onClick={props.handleClick}> {props.text} </button>
+            }
+
+            ReactDOM.render(<Counter />, rootHandle)
+        </script>
+    </body>
+</html>

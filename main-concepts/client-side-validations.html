@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div id="root">            
+        </div>
+        
+        
+        <!-- https://unpkg.com/react@16.8.6/umd/react.development.js -->
+        <script src="./js/react.development.js"></script>
+
+        <!-- https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js -->
+        <script src="./js/react-dom.development.js"></script>
+
+
+        <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+        <script src="./js/babel.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root');
+
+            //1. create a component called as Users, and maintain state to store all user information
+            //2. create a UserForm componet, which will be a controlled component, with input fields like name and email
+            //3. write the event handlers
+            //4. when the user clicks on the submit button, create a user object and print in the console, sample user obj - {id: Number(new Date()), name, email}
+
+            class Users extends React.Component {
+                constructor() {
+                    super()
+                    this.state = {
+                        users: []
+                    }
+
+                    this.handleRemove = this.handleRemove.bind(this)
+                    this.handleUsers = this.handleUsers.bind(this)
+                }
+
+                handleRemove(userId) {
+                    this.setState(prevState => (
+                        {
+                            users: prevState.users.filter(user => user.id != userId)
+                        }
+                    ))
+                }
+
+                handleUsers(user) {
+                    this.setState(prevState => (
+                        {
+                       //     users: [].concat(prevState.users, user)
+                            users: prevState.users.concat(user)
+                        }
+                    ))
+                }
+
+                render() {
+                    return (
+                        <div>
+                            <h2> Listing users </h2>
+                            <ul>
+                                {this.state.users.map(user => {
+                                    return <UserItem key={user.id} name={user.name} handleRemove={this.handleRemove} id={user.id}/>
+                                })}
+                            </ul>
+                            <UserForm handleUsers={this.handleUsers}/>
+                        </div>
+                    )
+                   
+                }
+            }
+
+            function UserItem(props) {
+                //es6 object destructing
+              //  const { id, name, handleRemove } = props
+                return (    
+                        <li>
+                            {props.name}<button onClick={() => {
+                                props.handleRemove(props.id)}}>Remove</button>
+                        </li>
+                )
+            }
+
+            class UserForm extends React.Component {
+                constructor(props) {
+                    super(props)
+                    this.state = {
+                        name: '',
+                        email: '',
+                        errorMsg: ''
+                    }
+                }
+                handleChange = e => {
+                  //  console.log(e.target, e.target.value, e.target.name)
+                    this.setState({
+                        [e.target.name] : e.target.value
+                    })
+                }
+
+                handleBlur = e => {
+                    if(e.target.name.match(/[A-Za-z]/ === null)) {
+                        
+                    }
+
+                }
+                
+
+                handleSubmit = e => {
+                    e.preventDefault()
+                    const userObj = {
+                        id: Number(new Date()),
+                        name: this.state.name,
+                        email: this.state.email
+                    }
+
+                    if(this.state.name && this.state.email) {
+                        this.props.handleUsers(userObj)
+                        this.setState({
+                            name: '',
+                            email: '',
+                            errorMsg: '',
+                            error: {
+                                name: '',
+                                email: ''
+                            }
+                        })
+                    } else {
+                        this.setState({
+                            errorMsg: 'Invalid form',
+                            error: {
+                                name: 'name is not valid',
+                                email: 'email is not valid'
+                            }
+                        })
+                    }
+                    
+                }
+
+                //Higher order function
+                //when function accepts a function as an argument is called a higher order function
+                //the function which is passed as an argument is called a callback function
+                //when a function 
+
+                render() {
+                    return (
+                        <div>
+                            <h2> Add User </h2>
+                            <p style={{color:'red'}}>{this.state.errorMsg}</p>
+                            <form onSubmit={this.handleSubmit}>
+                                <label> 
+                                    Name
+                                    <input type="text" value={this.state.name} onChange={this.handleChange} onBlur={this.handleBlur} name="name"/>       
+                                </label> <br/> <p style={{color:'red'}}>{this.state.error && this.state.error.name}</p>
+                                <label> 
+                                    Email
+                                    <input type="text" value={this.state.email} onChange={this.handleChange} onBlur={this.handleBlur} name="email"/>
+                                </label> <br/> <p style={{color:'red'}}>{this.state.error && this.state.error.email}</p>
+                                <input type="submit" value="add"/>
+                            </form>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<Users />, rootHandle)
+        </script>
+    </body>
+</html>

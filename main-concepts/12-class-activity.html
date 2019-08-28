@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div id="root">            
+        </div>
+        
+        
+        <!-- https://unpkg.com/react@16.8.6/umd/react.development.js -->
+        <script src="./js/react.development.js"></script>
+
+        <!-- https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js -->
+        <script src="./js/react-dom.development.js"></script>
+
+
+        <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+        <script src="./js/babel.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root');
+
+            class StringReverse extends React.Component {
+                constructor(props){
+                    console.log(props);
+                    console.log('constructor')
+                    super(props)
+
+                    this.state = {
+                        str: this.props.strprop
+                    }
+                }
+
+                reverseStr= () => {
+                    let revStr = '';
+                    this.setState((prevState) => {
+                        for(let i = prevState.str.length - 1; i >= 0; i--) {
+                            revStr = revStr + prevState.str[i];
+                        }
+                        return {
+                            str: revStr
+                          //  str: prevState.str.split('').reverse().join('')
+                        }
+                    })
+
+                }
+
+                render() {
+                    console.log('render')
+                    return (
+                        <div>
+                            {this.state.str}
+                            <br/>
+                            <button onClick={this.reverseStr}> reverse </button>
+                        </div>
+                    )
+                }
+            }
+
+            const ele = (
+                <div>
+                    <StringReverse strprop="Hello World"/>
+                </div>
+            )
+
+            ReactDOM.render(ele, rootHandle);
+        </script>
+    </body>
+</html>

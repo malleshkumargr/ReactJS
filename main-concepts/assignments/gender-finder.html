@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gender Finder</title>
+    </head>
+    <body>
+        <div id="root">
+        </div>
+
+        <script src="./js/react.development.js"></script>
+
+        <script src="./js/react-dom.development.js"></script>
+
+        <script src="./js/babel.js"></script>
+
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root')
+
+            class GenderFinder extends React.Component {
+                constructor() {
+                    super()
+                    console.log(this.state)
+                    this.state = {
+                        name: '',
+                        gender: ''
+                    }
+                }
+
+                handleSubmit = (e) => {
+                    e.preventDefault()
+                    axios.get(`https://gender-api.com/get?name=${this.state.name}&key=pRPLCejozFwCHFbVCR`)
+                        .then(response => {
+                            const gender = response.data.gender
+                            this.setState({gender})
+                            // this.setState({gender, name: ''})
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                }
+
+                handleChange = (e) => {
+                    console.log('Called for each key press')
+                    const name = e.target.value
+                    this.setState({name})
+                }
+
+                render() {
+                    return (
+                        <div>
+                            <form onSubmit={this.handleSubmit}>
+                                <label>
+                                    Name
+                                    <input type='text' value={this.state.name} onChange={this.handleChange}/>
+                                </label>
+                                <input type='submit' value='Determine Gender'/> <br/>
+                            </form>
+                            <p>{this.state.gender.toUpperCase()}</p>
+                        </div>
+                    )
+                }
+            }
+        
+            ReactDOM.render(<GenderFinder />, rootHandle)
+        </script>
+    </body>
+</html>

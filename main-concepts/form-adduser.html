@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add User</title>
+    </head>
+    <body>
+        <div id="root">            
+        </div>
+        
+        
+        <!-- https://unpkg.com/react@16.8.6/umd/react.development.js -->
+        <script src="./js/react.development.js"></script>
+
+        <!-- https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js -->
+        <script src="./js/react-dom.development.js"></script>
+
+
+        <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+        <script src="./js/babel.js"></script>
+
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root');
+
+            class User extends React.Component {
+                constructor() {
+                    super()
+                    this.state = {
+                        users: [],
+                        name: ''
+                    }
+                }
+
+                componentDidMount() {
+                    axios.get('https://jsonplaceholder.typicode.com/users')
+                        .then(response => {
+                            this.setState({
+                                users: response.data
+                            })
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                }
+
+                handleChange = (e) => {
+                    const name = e.target.value
+                    this.setState({name})
+                }
+
+                handleSubmit = (e) => {
+                    e.preventDefault()
+                    console.log()
+                    let userid = this.state.users[this.state.users.length - 1].id;
+                    console.log(userid)
+                    this.setState(prevState => {
+                        return {
+                            users: prevState.users.concat({name: this.state.name, id: ++userid})
+                        }
+                    })
+                }
+
+                render() {
+                    console.log('render', this.state)
+                    return (
+                        <div>
+                            <ul>
+                                {this.state.users.map((user) => {
+                                    return <li key={user.id}>{user.name}</li>
+                                })}
+                            </ul>
+                            <form onSubmit={this.handleSubmit}>
+                                <label> Enter Name to add to the list
+                                    <input type="text" value={this.state.name} onChange={this.handleChange}/>
+                                </label>
+                                <input type="submit" value='Add Name'/>
+                            </form>
+                        </div>
+                    )
+                }
+            }
+            const users = []
+            ReactDOM.render(<User />, rootHandle)
+            
+        </script>
+    </body>
+</html>

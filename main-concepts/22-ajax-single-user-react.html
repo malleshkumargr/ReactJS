@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div id="root">            
+        </div>
+        
+        
+        <!-- https://unpkg.com/react@16.8.6/umd/react.development.js -->
+        <script src="./js/react.development.js"></script>
+
+        <!-- https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js -->
+        <script src="./js/react-dom.development.js"></script>
+
+        <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+        <script src="./js/babel.js"></script>
+
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root');
+
+            class UserList extends React.Component {
+                constructor(){
+                    console.log('constructor')
+                    super()
+                    this.state = {
+                        user: {},
+                        isAdmin: true,
+                        isLoggedIn: true
+                    }
+
+                    this.habits = {
+                        habit1: 'drinking',
+                        habit2: 'smoking'
+                    }
+                }
+
+                componentDidMount() {
+                    console.log('component did mount')
+                    axios.get('https://jsonplaceholder.typicode.com/users/1')
+                        .then(response => {
+                            console.log('axios success fucntion')
+                            //console.log(response.data)
+                            const user = response.data
+                            this.setState({ user })
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                }
+
+                render() {
+                    return(
+                        <div>
+                            <h2>Name: {this.state.user.name}</h2>
+                            <h2>Email: {this.state.user.email}</h2>
+                            <h2>Address: {/*this.state.user.address && this.state.user.address*/}</h2>
+                            <h2>City: {this.state.user.address && this.state.user.address.city}</h2>
+
+                            {this.state.isAdmin && <a href=""> delete </a>}
+
+                            {this.state.isLoggedIn ? (
+                                <div>
+                                    show account and logout links
+                                </div>
+                            ) : (
+                                <div>
+                                    show register and login links
+                                </div>
+                            )}
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<UserList />, rootHandle)
+
+        </script>
+    </body>
+</html>
